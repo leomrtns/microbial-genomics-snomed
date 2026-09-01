@@ -8,8 +8,7 @@ authors:
 version: 0.3.0
 date-released: 2026-09-01
 license: MIT
-repository-code: "https://github.com/OWNER/microbial-genomics-snomed"
+repository-code: "https://github.com/leomrtns/microbial-genomics-snomed"
 abstract: >-
   Reproducible discovery and extraction of microbial-genomics terminology from
   SNOMED CT UK and NHSBSA dm+d releases.
-
