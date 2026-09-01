@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "microbial-genomics-snomed"
+version = "0.3.0"
+description = "Discover and extract microbial-genomics terminology from SNOMED CT UK and dm+d"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "Leo Martins"}]
+dependencies = []
+
+[project.optional-dependencies]
+parquet = ["pyarrow>=15"]
+dev = ["pytest>=8"]
+
+[project.scripts]
+snomed-infectious = "snomed_infectious.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

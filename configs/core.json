@@ -1,0 +1,29 @@
+{
+  "profile": {
+    "name": "core",
+    "description": "High-specificity diseases, microbial taxa, direct causative agents, and anti-infective medicines."
+  },
+  "snomed": {
+    "hierarchy_roots": {
+      "infectious disease": ["40733004"],
+      "bacterium": ["409822003"],
+      "fungus": ["414561005"],
+      "virus": ["49872002"],
+      "protozoan": ["416403006"],
+      "prion": ["84676004"],
+      "archaeon": ["419036000"]
+    },
+    "disease_root_labels": ["infectious disease"],
+    "microbe_root_labels": ["bacterium", "fungus", "virus", "protozoan", "prion", "archaeon"],
+    "lexical_rules": {},
+    "ambiguous_lexical_rules": [],
+    "ambiguous_rule_semantic_tags": [],
+    "causative_agent_attribute_id": "246075003",
+    "gb_language_refset_id": "900000000000508004"
+  },
+  "dmd": {
+    "bnf_prefixes": ["05"],
+    "atc_prefixes": ["J01", "J02", "J04", "J05"]
+  }
+}
+

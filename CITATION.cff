@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using this metadata."
+title: "microbial-genomics-snomed"
+type: software
+authors:
+  - family-names: "Martins"
+    given-names: "Leo"
+version: 0.3.0
+date-released: 2026-09-01
+license: MIT
+repository-code: "https://github.com/OWNER/microbial-genomics-snomed"
+abstract: >-
+  Reproducible discovery and extraction of microbial-genomics terminology from
+  SNOMED CT UK and NHSBSA dm+d releases.
+

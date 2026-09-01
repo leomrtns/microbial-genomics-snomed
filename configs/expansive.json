@@ -1,0 +1,58 @@
+{
+  "profile": {
+    "name": "expansive",
+    "description": "High-recall exploratory scope that adds broad symptoms, signs, epidemiology, hosts, reservoirs, vectors, and control terminology. Manual review is expected."
+  },
+  "snomed": {
+    "hierarchy_roots": {
+      "infectious disease": ["40733004"],
+      "bacterium": ["409822003"],
+      "fungus": ["414561005"],
+      "virus": ["49872002"],
+      "protozoan": ["416403006"],
+      "prion": ["84676004"],
+      "archaeon": ["419036000"],
+      "vaccine product": ["787859002"],
+      "microbiology laboratory observable": ["143471000237109", "1009251000000100"],
+      "microbiology procedure": ["269934003"],
+      "specimen": ["123038009"],
+      "mode of transmission": ["409496000"],
+      "drug resistance": ["31438003"],
+      "nucleic acid amplification": ["69363007"]
+    },
+    "disease_root_labels": ["infectious disease"],
+    "microbe_root_labels": ["bacterium", "fungus", "virus", "protozoan", "prion", "archaeon"],
+    "lexical_rules": {
+      "infection": "infect|sepsis|septic",
+      "microbiology": "microbi",
+      "microbial taxon": "bacteri|\\bvirus\\b|viral|fung|mycos|parasit|protozo|prion",
+      "anti-infective medicine": "antibiotic|antimicrobial|antiviral|antifungal|anti-infective",
+      "vaccine or immunisation": "vaccine|vaccinat|immuni[sz]ation",
+      "culture or susceptibility": "culture|susceptibil",
+      "infection control": "infection control|hand hygiene|disinfect|sterili[sz]|aseptic|isolation|personal protective",
+      "transmission or exposure": "transmission|airborne|droplet|faecal-oral|fecal-oral|vector-borne|exposure|contact with",
+      "resistance or virulence": "resistan|virulence|toxin|pathogenicity",
+      "molecular diagnostic": "polymerase chain reaction|nucleic acid|sequenc|genomic|genotyp",
+      "public health": "outbreak|epidemiolog|notifiable|notification|contact tracing|surveillance|carrier",
+      "host reservoir or vector": "host|reservoir|vector|zoon|anthropon",
+      "infectious signs or symptoms": "fever|pyrexia|rigor|chill|cough|sputum|diarrh|vomit|rash|malaise|fatigue|dysuria|discharge"
+    },
+    "ambiguous_lexical_rules": [
+      "culture or susceptibility", "transmission or exposure", "host reservoir or vector",
+      "infectious signs or symptoms"
+    ],
+    "ambiguous_rule_semantic_tags": [
+      "disorder", "event", "finding", "observable entity", "organism", "physical object", "procedure",
+      "qualifier value", "situation", "specimen", "substance"
+    ],
+    "causative_agent_attribute_id": "246075003",
+    "gb_language_refset_id": "900000000000508004"
+  },
+  "dmd": {
+    "bnf_prefixes": ["05"],
+    "atc_prefixes": [
+      "A07A", "D01", "D06", "D08", "G01", "J01", "J02", "J04", "J05", "J06", "J07",
+      "P01", "P02", "P03", "S01A", "S02A"
+    ]
+  }
+}
