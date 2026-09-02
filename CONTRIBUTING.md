@@ -1,6 +1,9 @@
 # Contributing
 
-Contributions are welcome through issues and pull requests.
+This is just so I'm not accepting contributions ATM. 
+However, one thing I can say is "quod gratis asseritur, gratis negatur".
+That is, if your pet LLM suggested a lot of changes without your close attention
+I'll reject them. 
 
 ## Development
 
@@ -10,7 +13,7 @@ python3 -m venv .venv
 PYTHONPATH=src .venv/bin/python -m unittest discover -s tests -v
 ```
 
-Keep source lines near 120 columns and use two spaces for indentation. Tests must use synthetic terminology fixtures: never commit SNOMED CT, dm+d, generated licensed extracts, or local source paths.
-
-Changes to discovery breadth must be auditable. Add or update tests and ensure new inclusion rules appear in `why_included` and the generated manifest.
+Changes to discovery breadth must be auditable. 
+Add or update tests.
+Ensure new inclusion rules appear in `why_included` and the generated manifest.
 
