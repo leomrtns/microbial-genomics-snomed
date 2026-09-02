@@ -3,8 +3,8 @@ message: "If you use this software, please cite it using this metadata."
 title: "microbial-genomics-snomed"
 type: software
 authors:
-  - family-names: "Martins"
-    given-names: "Leo"
+  - family-names: "de Oliveira Martins"
+    given-names: "Leonardo"
 version: 0.3.0
 date-released: 2026-09-01
 license: MIT

@@ -1,6 +1,6 @@
 # Contributing
 
-This is just so I'm not accepting contributions ATM. 
+This is just a stub so I'm not accepting contributions ATM. 
 However, one thing I can say is "quod gratis asseritur, gratis negatur".
 That is, if your pet LLM suggested a lot of changes without your close attention
 I'll reject them. 

@@ -3,7 +3,8 @@ Merging information between Electronic Health Records (EHR) and microbial-genomi
 
 # Broad microbial terminology extractor
 
-This command-line program builds a small, readable vocabulary for microbial-genomics database matching from SNOMED CT UK and NHS dm+d. It reads the licensed source releases in place and never modifies or unpacks them.
+This command-line program builds a small, readable vocabulary for microbial-genomics database matching from SNOMED CT UK
+and NHS dm+d. It reads the licensed source releases in place and never modifies or unpacks them.
 
 The deliverable consists of **three mutually exclusive matrices** (or `.tsv`/`.parquet`):
 
@@ -20,7 +21,10 @@ Together they cover:
 - vaccines and immunisation concepts;
 - dm+d anti-infective therapeutic moieties, ingredients, generic products, branded products, and packs.
 
-No join is required to interpret any matrix. The shared matrix contains both vocabularies' names, categories, relationships, medicine hierarchy, ingredients, and classifications on the same row. Shared identifiers are excluded from both “only” matrices.
+No join is required to interpret any matrix. The shared matrix contains both vocabularies' names, categories,
+relationships, medicine hierarchy, ingredients, and classifications on the same row. Shared identifiers are excluded
+from both “only” matrices.
+
 
 ## How “related” is discovered
 
@@ -28,17 +32,23 @@ A single SNOMED root cannot represent everything related to infection because di
 
 ### Phase 1: broad discovery
 
-1. Follow every active inferred `IS-A` edge below configured roots for infectious disease, microbial taxonomies, vaccine products, and microbiology tests/procedures.
-2. Include concepts with defining SNOMED relationships to a selected disease, microbe, or infectious agent, plus their descendants.
-3. Include direct causative agents of infectious diseases. This captures agents outside the narrow microbial taxonomy without expanding a broad agent such as “organism” into unrelated plants and animals.
+1. Follow every active inferred `IS-A` edge below configured roots for infectious disease, microbial taxonomies, vaccine
+   products, and microbiology tests/procedures.
+2. Include concepts with defining SNOMED relationships to a selected disease, microbe, or infectious agent, plus their
+   descendants.
+3. Include direct causative agents of infectious diseases. This captures agents outside the narrow microbial taxonomy
+   without expanding a broad agent such as “organism” into unrelated plants and animals.
 4. Add legacy or weakly modelled concepts whose fully specified names match explicit microbial lexical rules.
-5. Select dm+d anti-infective products using the supplementary BNF/ATC mappings, then follow the dm+d product and ingredient hierarchy.
+5. Select dm+d anti-infective products using the supplementary BNF/ATC mappings, then follow the dm+d product and
+   ingredient hierarchy.
 
-Semantic and classification selections have `confidence=high`. Concepts found only by their name have `confidence=medium` so they can be reviewed or filtered without hiding how they entered the table.
+Semantic and classification selections have `confidence=high`. Concepts found only by their name have
+`confidence=medium` so they can be reviewed or filtered without hiding how they entered the table.
 
 ### Phase 2: denormalisation
 
-Technical edges are converted to readable columns. For example, instead of a row such as `AMP -> has_vmp -> 41954511000001101`, the dm+d-only and shared matrices provide columns such as:
+Technical edges are converted to readable columns. For example, instead of a row such as `AMP -> has_vmp ->
+41954511000001101`, the dm+d-only and shared matrices provide columns such as:
 
 - `medicine_level = branded or manufacturer medicinal product`
 - `generic_product_ids`
@@ -47,13 +57,18 @@ Technical edges are converted to readable columns. For example, instead of a row
 - `ingredients`
 - `bnf_codes` and `atc_codes`
 
-The SNOMED-only and shared matrices likewise have `linked_diseases`, `linked_microbes`, `relationship_summary`, and `why_included` columns. The partition avoids structurally blank dm+d columns on SNOMED-only rows and vice versa.
+The SNOMED-only and shared matrices likewise have `linked_diseases`, `linked_microbes`, `relationship_summary`, and
+`why_included` columns. The partition avoids structurally blank dm+d columns on SNOMED-only rows and vice versa.
 
 ## Polyhierarchy
 
-The traversal uses **all active inferred parents**, not one preferred parent. A urinary tract infection or infectious pneumonia is included if any `IS-A` path reaches infectious disease, even when another path also places it under urinary or respiratory disease.
+The traversal uses **all active inferred parents**, not one preferred parent. A urinary tract infection or infectious
+pneumonia is included if any `IS-A` path reaches infectious disease, even when another path also places it under urinary
+or respiratory disease.
 
-Polyhierarchy does not connect different semantic domains. An antibiotic, vaccine, or laboratory test cannot be reached through the infectious-disease root because it is not a disorder. The additional roots and relationship/lexical discovery steps are what include those concepts.
+Polyhierarchy does not connect different semantic domains. An antibiotic, vaccine, or laboratory test cannot be reached
+through the infectious-disease root because it is not a disorder. The additional roots and relationship/lexical
+discovery steps are what include those concepts.
 
 ## Install
 
@@ -78,11 +93,15 @@ Breadth is an explicit input, not a fixed property of the software.
 
 | Profile | Intended use | Included scope |
 |---|---|---|
-| `core` | High-specificity linkage | Infectious disorders, microbial taxonomies, direct causative agents, and narrowly classified systemic anti-infectives. |
-| `research` | Default microbial-genomics work | Core plus laboratory tests, all specimens, vaccines, transmission modes, antimicrobial resistance, molecular diagnostics, infection control, public health, and broader anti-infectives. |
-| `expansive` | High-recall exploration | Research plus broader symptoms/signs, exposure, hosts, reservoirs, vectors, virulence, epidemiology, and genomic terminology. More manual review is expected. |
+| `core` | High-specificity linkage | Infectious disorders, microbial taxonomies, direct causative agents, and narrowly
+classified systemic anti-infectives. |
+| `research` | Default microbial-genomics work | Core plus laboratory tests, all specimens, vaccines, transmission
+modes, antimicrobial resistance, molecular diagnostics, infection control, public health, and broader anti-infectives. |
+| `expansive` | High-recall exploration | Research plus broader symptoms/signs, exposure, hosts, reservoirs, vectors,
+virulence, epidemiology, and genomic terminology. More manual review is expected. |
 
-The profiles are ordinary JSON files in `configs/`. A study can copy one, change roots, regular expressions, BNF prefixes, or ATC prefixes, and pass it using `--config`.
+The profiles are ordinary JSON files in `configs/`. A study can copy one, change roots, regular expressions, BNF
+prefixes, or ATC prefixes, and pass it using `--config`.
 
 Users can also extend any profile from the command line:
 
@@ -105,7 +124,8 @@ First discover the candidate scope:
   --output-dir scope/research
 ```
 
-This writes an editable `scope_candidates.tsv` with one row per SNOMED concept. The `why_included` and `confidence` columns explain the evidence. Change `include` from `1` to `0` for unwanted concepts.
+This writes an editable `scope_candidates.tsv` with one row per SNOMED concept. The `why_included` and `confidence`
+columns explain the evidence. Change `include` from `1` to `0` for unwanted concepts.
 
 Then build the final matrices from the approved scope:
 
@@ -120,7 +140,8 @@ Then build the final matrices from the approved scope:
   --format tsv.gz
 ```
 
-Use the same profile, seed concepts, literal terms, and regular expressions in both commands. The build refuses an incompatible scope rather than silently dropping approved concepts.
+Use the same profile, seed concepts, literal terms, and regular expressions in both commands. The build refuses an
+incompatible scope rather than silently dropping approved concepts.
 
 ## One-stage run
 
@@ -150,7 +171,9 @@ Use `--format tsv` for uncompressed TSV or `--format parquet` after installing `
 
 ## Matrix structure
 
-Each matrix has one row per searchable term. Repetition is intentional: a concept with one fully specified name and three synonyms occupies four rows. Every row repeats the readable context needed to use it without reconstructing SNOMED or dm+d.
+Each matrix has one row per searchable term. Repetition is intentional: a concept with one fully specified name and
+three synonyms occupies four rows. Every row repeats the readable context needed to use it without reconstructing SNOMED
+or dm+d.
 
 Important columns include:
 
@@ -169,7 +192,8 @@ Important columns include:
 | `generic_products`, `brand_products`, `ingredients` | Denormalised dm+d hierarchy names. |
 | `bnf_codes`, `atc_codes` | Medicine classification evidence. |
 
-The dm+d matrix additionally contains its flattened medicine hierarchy. The SNOMED matrix contains semantic tags and disease/microbe relationships. Each has an independent data dictionary in `manifest.json`.
+The dm+d matrix additionally contains its flattened medicine hierarchy. The SNOMED matrix contains semantic tags and
+disease/microbe relationships. Each has an independent data dictionary in `manifest.json`.
 
 ## Manifest
 
@@ -201,14 +225,17 @@ The default research profile covers the commonly requested groups:
 - transmission modes;
 - public-health notification, outbreak, and contact-tracing concepts.
 
-The expansive profile also explores signs and symptoms, hosts, reservoirs, vectors, exposures, virulence, toxins, and epidemiology. These are less specific: fever and cough are relevant to infection but are not uniquely microbial.
+The expansive profile also explores signs and symptoms, hosts, reservoirs, vectors, exposures, virulence, toxins, and
+epidemiology. These are less specific: fever and cough are relevant to infection but are not uniquely microbial.
 
 Other defensible discovery approaches can be added later or used to supply seeds to this software:
 
 1. Curated reference sets or ECL queries from a SNOMED terminology server.
-2. External authoritative lists such as notifiable diseases, pathogen taxonomies, antimicrobial classifications, or laboratory catalogues.
+2. External authoritative lists such as notifiable diseases, pathogen taxonomies, antimicrobial classifications, or
+   laboratory catalogues.
 3. Controlled graph-neighbourhood expansion by relationship type and hop count.
-4. Mapping from microbial databases first, using organism names, taxonomic identifiers, resistance genes, virulence factors, and assay names as seeds.
+4. Mapping from microbial databases first, using organism names, taxonomic identifiers, resistance genes, virulence
+   factors, and assay names as seeds.
 5. Corpus-based discovery from clinical/laboratory text, followed by expert review.
 6. Embedding or language-model similarity as a candidate generator, never as unexplained automatic inclusion.
 
@@ -216,17 +243,23 @@ The key design rule is that each method should emit evidence into `why_included`
 
 ## Scope customisation
 
-All semantic roots and lexical rules are in `configs/core.json`, `configs/research.json`, and `configs/expansive.json`. Copy a file, edit it, and pass the copy with `--config`. This is preferable to changing Python source and makes a study-specific scope reproducible.
+All semantic roots and lexical rules are in `configs/core.json`, `configs/research.json`, and `configs/expansive.json`.
+Copy a file, edit it, and pass the copy with `--config`. This is preferable to changing Python source and makes a
+study-specific scope reproducible.
 
-The default dm+d rules include BNF chapter `05` and systemic, topical, ophthalmic, otological, genitourinary, intestinal, antiparasitic, immune-serum, and vaccine ATC classes. Narrow the ATC prefixes if the study needs only therapeutic systemic anti-infectives.
+The default dm+d rules include BNF chapter `05` and systemic, topical, ophthalmic, otological, genitourinary,
+intestinal, antiparasitic, immune-serum, and vaccine ATC classes. Narrow the ATC prefixes if the study needs only
+therapeutic systemic anti-infectives.
 
 ## Important limitations
 
-- No finite terminology rule can guarantee every scientifically plausible association. The table records explicit semantics and lexical evidence rather than pretending that “related” is objective.
+- No finite terminology rule can guarantee every scientifically plausible association. The table records explicit
+  semantics and lexical evidence rather than pretending that “related” is objective.
 - Medium-confidence lexical-only concepts should be reviewed for a high-specificity analysis.
 - A terminology relationship is not evidence of causality or clinical indication.
 - dm+d BNF/ATC classification is not a patient-specific indication.
-- The software includes no licensed terminology content, but generated tables remain subject to SNOMED CT and dm+d licensing conditions.
+- The software includes no licensed terminology content, but generated tables remain subject to SNOMED CT and dm+d
+  licensing conditions.
 
 ## Test
 
@@ -234,7 +267,8 @@ The default dm+d rules include BNF chapter `05` and systemic, topical, ophthalmi
 PYTHONPATH=src python3 -m unittest discover -s tests -v
 ```
 
-The tests cover polyhierarchy, cross-hierarchy laboratory and vaccine selection, RF2 parsing, dm+d class selection, wide product/ingredient denormalisation, and the cross-vocabulary split.
+The tests cover polyhierarchy, cross-hierarchy laboratory and vaccine selection, RF2 parsing, dm+d class selection, wide
+product/ingredient denormalisation, and the cross-vocabulary split.
 
 ## References
 
